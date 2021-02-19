@@ -28,6 +28,21 @@ struct ContentView: View {
     
     func getJokes() {
         let apiKey = "?rapidapi-key=8b767f7e74mshdfc34e279a69669p179c3fjsna468a7691543"
+        let query = "https://dad-jokes.p.rapidapi.com/joke/type/programming\(apiKey)"
+               if let url = URL(string: query) {
+                   if let data = try? Data(contentsOf: url) {
+                       let json = try! JSON(data: data)
+                       if json["success"] == true {
+                           let contents = json["body"].arrayValue
+                           for item in contents {
+                               let setup = item["setup"].stringValue
+                               let punchline = item["punchline"].stringValue
+                               let joke = Joke(setup: setup, punchline: punchline)
+                               jokes.append(joke)
+                           }
+                       }
+                   }
+               }
         }
 }
 
