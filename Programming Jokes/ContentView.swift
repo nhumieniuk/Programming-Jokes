@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var showingAlert = false
     @State private var jokes = [Joke]()
     var body: some View {
         NavigationView{
@@ -23,6 +24,11 @@ struct ContentView: View {
         }
         .onAppear(perform: {
             getJokes()
+        })
+        .alert(isPresented: $showingAlert, content: {
+            Alert(title: Text("Loading Error"),
+                  message: Text("There was a problem loading the data"),
+                  dismissButton: .default(Text("Ok")))
         })
     }
     
@@ -40,9 +46,11 @@ struct ContentView: View {
                                let joke = Joke(setup: setup, punchline: punchline)
                                jokes.append(joke)
                            }
+                        return
                        }
                    }
                }
+        showingAlert = true
         }
 }
 
